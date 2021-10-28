@@ -1,0 +1,1 @@
+INSERT INTO long_to_code (orig_url, code) VALUES ("https://google.com", "abc123");

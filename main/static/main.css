@@ -1,0 +1,11 @@
+#title {
+    background-color: rgba(39, 16, 61, 0.658)
+}
+
+#title * {
+    color: aliceblue
+}
+
+#form {
+    max-width: 600px;
+}

@@ -1,0 +1,7 @@
+mysqlclient
+sqlalchemy
+uvicorn
+fastapi
+aiohttp
+get-docker-secret
+jinja2
