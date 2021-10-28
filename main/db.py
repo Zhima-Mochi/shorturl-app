@@ -1,15 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from model import Base
-import os
-from get_docker_secret import get_docker_secret
 
-HOST = "db"
-DATABASE_NAME = os.environ['DB_NAME']
-USER_NAME = os.environ['DB_USERNAME']
-PASSWORD = get_docker_secret('db_shorturl_password')
-
-DATABASE = f"mysql://{USER_NAME}:{PASSWORD}@{HOST}/{DATABASE_NAME}?charset=utf8"
+SQLITE_DB_URL = "sqlite:///./sql_app.db"
+DATABASE = SQLITE_DB_URL
 
 ENGINE = create_engine(
     DATABASE
@@ -25,10 +19,4 @@ session = scoped_session(
 
 Base.query = session.query_property()
 
-
-def main():
-    Base.metadata.create_all(bind=ENGINE)
-
-
-if __name__ == "__main__":
-    main()
+Base.metadata.create_all(bind=ENGINE)

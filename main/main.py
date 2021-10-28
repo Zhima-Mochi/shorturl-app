@@ -13,7 +13,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import os
 
-HOST_NAME = os.environ['HOST_NAME']
+#HOST_NAME = os.environ['HOST_NAME']
+HOST_NAME="http://localhost:5000/"
 # FRONTEND_HOST_NAME = os.environ['FRONTEND_HOST_NAME']
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -22,7 +23,7 @@ templates = Jinja2Templates(directory="templates")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[HOST_NAME],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
