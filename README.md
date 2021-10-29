@@ -18,4 +18,8 @@ $ docker-compose up
 ```
 Now, have fun with http://localhost:56643/.
 # Demo
+## [Heroku app website](https://akb49.herokuapp.com/) (see branch heroku-demo)
 ![](/src/examples/main_page.png)
+
+# Note
+All the url will be tested first it can be requested or not, so there is CORS block issue.
