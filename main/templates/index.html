@@ -47,7 +47,7 @@
         if (data.is_success) {
             // create hyperlink element
             let code = document.createElement("a");
-            code.href = data.host_name + data.code;
+            code.href = data.host_name + '/' + data.code;
             code.innerText = code.href;
             block.className = "alert alert-success";
             block.appendChild(code);

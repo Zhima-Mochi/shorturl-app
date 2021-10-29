@@ -13,8 +13,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import os
 
-#HOST_NAME = os.environ['HOST_NAME']
-HOST_NAME="http://localhost:5000/"
+HOST_NAME = os.environ['HOST_NAME']
 # FRONTEND_HOST_NAME = os.environ['FRONTEND_HOST_NAME']
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
