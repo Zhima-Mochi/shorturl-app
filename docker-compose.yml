@@ -23,8 +23,8 @@ services:
       networks:
         - local-network
     app:
-      # links:
-      #   - db
+      depends_on:
+        - "db"
       build: ./src/app
       restart: always
       environment:

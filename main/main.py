@@ -1,23 +1,29 @@
-from pydantic import BaseModel
-from fastapi import FastAPI
-from typing import List, Optional
+from typing import List
+from fastapi import Depends, FastAPI, HTTPException
 from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 from starlette.responses import FileResponse
-from utility import *
-from sqlalchemy import func
-from pydantic import BaseModel, Field
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
+import aiohttp
+import crud
+import models
+import schemas
+from database import SessionLocal, engine
 import os
+
 
 HOST_NAME = os.environ['HOST_NAME']
 # FRONTEND_HOST_NAME = os.environ['FRONTEND_HOST_NAME']
-app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 app.add_middleware(
@@ -28,12 +34,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-class OrigUrl(BaseModel):
-    url: str
+# Dependency
 
 
-long_url_code = LongUrlCode()
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+async def valid_url(url):
+    try:
+        async with aiohttp.ClientSession() as http_session:
+            async with http_session.get(url) as resp:
+                return resp.status == 200
+    except:
+        return False
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -48,14 +66,19 @@ async def favicon():
 
 
 @app.get("/{code}")
-async def redirect_to_original_url(code: str):
-    return RedirectResponse(url=long_url_code.decode(code))
+async def redirect_to_original_url(code: str, db: Session = Depends(get_db)):
+    return RedirectResponse(url=crud.get_longUrl(db, code))
 
 
 @app.post("/")
-async def generate_code(given_url_obj: OrigUrl):
+async def generate_code(given_url_obj: schemas.OrigUrl, db: Session = Depends(get_db)):
     if(not await valid_url(given_url_obj.url)):
-        return {'is_success': False}
+        return {'is_success': False, 'message': '這是一個無效的網址'}
     print(given_url_obj)
-    code = long_url_code.encode(given_url_obj.url)
-    return {'is_success': True, 'host_name': HOST_NAME, 'code': code}
+    code_elem = crud.get_code(db, given_url_obj.url)
+    if not code_elem:
+        code_elem = crud.create_code(db, given_url_obj.url)
+    if code_elem['status']:
+        return {'is_success': True, 'host_name': HOST_NAME, 'code': code_elem['code']}
+    else:
+        return {'is_success': False, 'message': '內部錯誤'}

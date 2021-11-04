@@ -31,7 +31,7 @@ function addElement(data) {
         document.getElementById("form").appendChild(block);
     } else {
         let text = document.createElement("div");
-        text.innerText = "這是一個無效的網址";
+        text.innerText = data.message;
         block.className = "alert alert-warning";
         block.appendChild(text);
         document.getElementById("form").appendChild(block);

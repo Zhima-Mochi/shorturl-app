@@ -11,7 +11,7 @@ class LongToCode(Base):
     created_time = Column(
         DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
 
-    def __init__(self, code, orig_url, created_time):
-        self.code = code
-        self.orig_url = orig_url
-        self.created_time = created_time
+    # def __init__(self, code, orig_url, created_time):
+    #     self.code = code
+    #     self.orig_url = orig_url
+    #     self.created_time = created_time
