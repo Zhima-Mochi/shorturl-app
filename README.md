@@ -20,8 +20,11 @@ $ docker-compose up
 ```
 Now, have fun with http://localhost:56643/.
 ## Demo
-[Heroku app website](https://akb49.herokuapp.com/) (see branch heroku-demo)
+- [Heroku app website](https://akb49.herokuapp.com/) (slow start) (see branch heroku-demo)  
+- [Virtual machine](http://108.61.187.106:8090/) (fast start)
+
 ![](/src/examples/main_page.png)
+
 
 ## Note
 All the url will be tested first it can be requested or not, so there is CORS block issue.
