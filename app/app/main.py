@@ -22,15 +22,15 @@ HOST_NAME = os.environ['HOST_NAME']
 app = FastAPI()
 
 
-# @app.on_event("startup")
-# async def startup():
-#     async with engine.begin() as conn:
-#         await conn.run_sync(models.Base.metadata.create_all)
+@app.on_event("startup")
+async def startup():
+    async with engine.begin() as conn:
+        await conn.run_sync(models.Base.metadata.create_all)
 
 
-# @app.on_event("shutdown")
-# async def shutdown():
-#     await engine.dispose()
+@app.on_event("shutdown")
+async def shutdown():
+    await engine.dispose()
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
