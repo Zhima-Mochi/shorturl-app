@@ -1,7 +1,9 @@
 mysqlclient
-sqlalchemy
+sqlalchemy==1.4.31
 uvicorn
 fastapi
 aiohttp
 get-docker-secret
 jinja2
+aiomysql
+aiosqlite

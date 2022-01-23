@@ -1,52 +1,51 @@
 version: "3.9"
 
 services:
-    db:
-      image: mysql:8
-      restart: always
-      tty: true
-      environment:
-        MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_shorturl_root_password
-        MYSQL_DATABASE: shorturl
-        MYSQL_USER: customer
-        MYSQL_PASSWORD_FILE: /run/secrets/db_shorturl_password
-      secrets:
-        - db_shorturl_root_password
-        - db_shorturl_password
-      ports:
-        - "55555:3306"
-      volumes: 
-        - shorturl-data:/var/lib/mysql
-        - ./src/mysql/initdb.d:/docker-entrypoint-initdb.d
-        - ./src/mysql/conf.d:/etc/mysql/conf.d
-        - ./log/mysql:/var/log/mysql
-      networks:
-        - local-network
-    app:
-      depends_on:
-        - "db"
-      build: ./src/app
-      restart: always
-      environment:
-        DB_NAME: shorturl
-        DB_USERNAME: customer
-        HOST_NAME: http://localhost:56643/
-        FRONTEND_HOST_NAME: http://localhost:56643/
-      secrets:
-        - db_shorturl_password
-      ports: 
-        - "56643:8000"
-      volumes:  
-        - ./main:/usr/src/server
-      networks:
-        - local-network
+  db:
+    image: mysql:8
+    restart: always
+    tty: true
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_shorturl_root_password
+      MYSQL_DATABASE: shorturl
+      MYSQL_USER: customer
+      MYSQL_PASSWORD_FILE: /run/secrets/db_shorturl_password
+    secrets:
+      - db_shorturl_root_password
+      - db_shorturl_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-vol:/var/lib/mysql
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+      - ./db/conf.d:/etc/mysql/conf.d
+      # - ./db/log/mysql:/var/log/mysql
+    networks:
+      - local-network
+  app:
+    depends_on:
+      - db
+    build: ./app
+    restart: always
+    environment:
+      DB_NAME: shorturl
+      DB_USERNAME: customer
+      HOST_NAME: http://localhost:80/
+      FRONTEND_HOST_NAME: http://localhost:80/
+      DB_HOST: db
+    secrets:
+      - db_shorturl_password
+    ports:
+      - "80:80"
+    networks:
+      - local-network
 secrets:
-    db_shorturl_password:
-      file: secrets/db_shorturl_password
-    db_shorturl_root_password:
-      file: secrets/db_shorturl_root_password
+  db_shorturl_password:
+    file: secrets/db_shorturl_password
+  db_shorturl_root_password:
+    file: secrets/db_shorturl_root_password
 networks:
   local-network:
     driver: bridge
 volumes:
-  shorturl-data:
+  db-vol:
