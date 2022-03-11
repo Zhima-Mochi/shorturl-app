@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime
 import datetime
-from sqlalchemy.ext.declarative import declarative_base
-Base = declarative_base()
+from database import Base
 
 
 class LongToCode(Base):
