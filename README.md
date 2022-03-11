@@ -15,15 +15,9 @@ $ docker-compose up
 ```
 Now, have fun with http://localhost.
 ## Demo
-<<<<<<< HEAD
 [Heroku app website](https://akb49.herokuapp.com/) (see branch heroku-demo)
 
 ![demo](demo/demo1.png)
-=======
-- [Heroku app website](https://akb49.herokuapp.com/) (slow start) (see branch heroku-demo)
-
-![](/src/examples/main_page.png)
->>>>>>> 4b636760a64ef9c4174e429a865a2988831b029c
 
 
 ## Note
